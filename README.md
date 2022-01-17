@@ -41,7 +41,7 @@ grave um usuario no banco de dados com os seguintes campos
 usando `curl` e `jq`: \
 para logar e gravar o token na variavel `TOKEN`
 ```bash
-TOKEN=$(curl -s -X POST -H 'Content-Type: application/json' --data '{"name": "user1@mail.com", "password": "123456" }' localhost:3000/login  | jq -r '.token')
+TOKEN=$(curl -s -X POST -H 'Content-Type: application/json' --data '{"email": "user1@mail.com", "password": "123456" }' localhost:3000/login  | jq -r '.token')
 ```
 
 para acessar um endpoint protegido:
