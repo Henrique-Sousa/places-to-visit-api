@@ -1,0 +1,5 @@
+node_modules
+*.sw?
+build
+generateKeyPair.js
+*.pem
