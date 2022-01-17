@@ -2,7 +2,7 @@ import express from 'express';
 import { connect } from 'mongoose';
 import passport from 'passport';
 import './config/passportConfig';
-import placesRouter from './routes/classes';
+import placesRouter from './routes/places';
 import logUserIn from './controllers/userController';
 
 type Request = express.Request;
@@ -10,7 +10,7 @@ type Response = express.Response;
 type NextFunction = express.NextFunction;
 
 async function run(): Promise<void> {
-  await connect('mongodb://localhost:27017/tindin');
+  await connect('mongodb://localhost:27017/tindin-fase2');
 }
 
 run().catch((err) => console.log(err));
@@ -31,6 +31,6 @@ app.all('*', (_req: Request, res: Response, next: NextFunction): void => {
 });
 
 app.post('/login', logUserIn);
-app.use('/places', placesRouter);
+app.use('/places', passport.authenticate('jwt', { session: false }), placesRouter);
 
 app.listen(3000);
