@@ -48,7 +48,7 @@ export const getAllPlaces: controllerFunction = async (req, res, next) => {
     } = req.body;
 
     if (search) {
-      query.name = new RegExp(search);
+      query.name = new RegExp(search, 'i');
     }
 
     if (order) {
