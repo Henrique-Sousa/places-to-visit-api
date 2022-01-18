@@ -2,7 +2,7 @@ import { Router } from 'express';
 import passport from 'passport';
 import {
   createPlace,
-// getAllPlaces,
+  getAllPlaces,
 // getPlaceById,
 // updatePlace,
 // deletePlace,
@@ -11,7 +11,7 @@ import {
 const Places = Router();
 
 Places.post('/', createPlace);
-// Places.get('/', getAllPlaces);
+Places.get('/', getAllPlaces);
 // Places.get('/:id', getPlaceById);
 // Places.put('/', updatePlace);
 // Places.delete('/:id', deletePlace);

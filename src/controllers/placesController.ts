@@ -28,9 +28,53 @@ export const createPlace: controllerFunction = async (req, res, next) => {
   res.send('You should specify a name');
 };
 
-// export const getAllPlaces: controllerFunction = async (req, res, next) => {
-//
-// };
+interface FindQuery {
+  name?: RegExp,
+}
+
+interface FindOptions {
+  sort?: { [key: string]: number },
+  skip?: number,
+  limit?: number,
+}
+
+export const getAllPlaces: controllerFunction = async (req, res, next) => {
+  const query: FindQuery = {};
+  const options: FindOptions = {};
+
+  if (req.body) {
+    const {
+      search, order, page, limit,
+    } = req.body;
+
+    if (search) {
+      query.name = new RegExp(search);
+    }
+
+    if (order) {
+      options.sort = { [order]: 1 };
+    }
+
+    if (limit) {
+      options.limit = limit;
+    } else {
+      options.limit = 50;
+    }
+
+    if (page) {
+      options.skip = limit * (page - 1);
+    }
+  }
+
+  try {
+    const places = await Place.find(query, null, options);
+    res.send(places);
+  } catch (e) {
+    console.log(e);
+  }
+
+  res.end();
+};
 
 // export const getPlaceById: controllerFunction = async (req, res, next) => {
 //
