@@ -7,7 +7,13 @@ telefone: (31)99730-1889 \
 localização: Belo Horizonte, MG, Brasil \
 linkedin: linkedin.com/in/henriquelsousa
 
-para rodar, primeiro instale
+Para rodar, primeiro crie um arquivo `.env` na pasta raiz com o seguinte campo \
+e preencha com sua `Access Key`
+```
+ACCESS_KEY = <sua_key>
+```
+
+depois instale as dependências
 ```bash
 npm i
 ```

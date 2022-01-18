@@ -3,3 +3,4 @@ node_modules
 build
 generateKeyPair.js
 *.pem
+.env
