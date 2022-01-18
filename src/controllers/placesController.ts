@@ -21,11 +21,11 @@ export const createPlace: controllerFunction = async (req, res, next) => {
       res.send(savedPlace);
 
     } catch (e) {
-      console.log(e);
+      res.send('Search term not found on Unsplash');
     }
   }
 
-  res.end();
+  res.send('You should specify a name');
 };
 
 // export const getAllPlaces: controllerFunction = async (req, res, next) => {
