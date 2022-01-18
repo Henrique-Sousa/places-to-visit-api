@@ -29,17 +29,17 @@ export const createPlace: controllerFunction = async (req, res, next) => {
 };
 
 // export const getAllPlaces: controllerFunction = async (req, res, next) => {
-//   res.send('ok');
+//
 // };
 
 // export const getPlaceById: controllerFunction = async (req, res, next) => {
-//   res.send('ok');
+//
 // };
 
 // export const updatePlace: controllerFunction = async (req, res, next) => {
-//   res.send('ok');
+//
 // };
 
 // export const deletePlace: controllerFunction = async (req, res, next) => {
-//   res.send('ok');
+//
 // };
