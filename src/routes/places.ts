@@ -6,7 +6,7 @@ import {
 // getPlaceById,
 // updatePlace,
 // deletePlace,
-} from '../controllers/placesController';
+} from '../controllers/placeController';
 
 const Places = Router();
 
