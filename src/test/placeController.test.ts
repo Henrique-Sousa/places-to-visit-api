@@ -36,6 +36,7 @@ async function cleanDatabase() {
   for (const place of places) {
     await Place.deleteOne({ name: place.name });
   }
+  await Place.deleteOne({ name: 'chicago' });
 }
 
 afterEach(async () => {
@@ -124,5 +125,24 @@ test('PUT /places/:id with a wrong id', async () => {
         name: place.name,
       });
     expect(result.text).toBe('This place id has that name already');
+  }
+});
+
+test('PUT /places/:id OK', async () => {
+  await insertPlaces();
+
+  const place = await Place.findOne({ name: 'maringa' });
+  if (place) {
+    const id = place._id.toString();
+
+    const result = await request(app)
+      .put('/places/')
+      .send({
+        _id: id,
+        name: 'chicago',
+      });
+    expect(result.body._id).toBe(id);
+    expect(result.body.name).toBe('chicago');
+    expect(result.body).toHaveProperty('photo');
   }
 });
