@@ -89,8 +89,9 @@ test('DELETE /places/:id', async () => {
   const placesResult = await Place.find();
   const id = placesResult[0]._id;
 
-  await request(app)
+  const deleted = await request(app)
     .delete(`/places/${id}`);
+  expect(deleted.body._id).toBe(id.toString());
 
   const result = await Place.find();
   expect(result);
