@@ -133,6 +133,6 @@ export const updatePlace: controllerFunction = async (req, res, next) => {
 };
 
 export const deletePlace: controllerFunction = async (req, res, next) => {
-  await Place.findByIdAndRemove(req.params.id);
-  res.end();
+  const deleted = await Place.findByIdAndRemove(req.params.id);
+  res.send(deleted);
 };
