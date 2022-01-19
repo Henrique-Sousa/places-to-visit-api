@@ -64,3 +64,19 @@ test('GET /places', async () => {
   expect(result.body[0].name).toBe('maringa');
   expect(result.body[1].name).toBe('maryland');
 });
+
+test('GET /places/:id', async () => {
+  await insertPlaces();
+
+  const place = await Place.findOne({ name: 'maringa' });
+  if (place) {
+    const id = place._id;
+    const result = await request(app)
+      .get(`/places/${id}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+    expect(result.body._id).toBe(id.toString());
+    expect(result.body.name).toBe('maringa');
+    expect(result.body).toHaveProperty('photo');
+  }
+});
