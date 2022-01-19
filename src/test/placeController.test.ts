@@ -1,6 +1,7 @@
 import request from 'supertest';
 import express from 'express';
 import { connect, connection } from 'mongoose';
+import { createNewPlace } from '../controllers/placeController';
 
 import Place from '../models/place';
 import placesRouter from '../routes/places';
@@ -144,5 +145,15 @@ test('PUT /places/:id OK', async () => {
     expect(result.body._id).toBe(id);
     expect(result.body.name).toBe('chicago');
     expect(result.body).toHaveProperty('photo');
+  }
+});
+
+test('createNewPlace', async () => {
+  await createNewPlace('maringa');
+  const result = await Place.find();
+  if (result) {
+    expect(result.length).toBe(1);
+    expect(result[0].name).toBe('maringa');
+    expect(result[0]).toHaveProperty('photo');
   }
 });

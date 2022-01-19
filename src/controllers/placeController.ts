@@ -1,31 +1,49 @@
+import { Document } from 'mongoose';
 import axios from 'axios';
 import { controllerFunction } from './functions';
 import Place from '../models/place';
 
-const unsplashURL = 'https://api.unsplash.com/search/photos?per_page=1&query=';
-const accessKey = process.env.ACCESS_KEY;
+export const fetchImage: (s: string) => Promise<string> = async (name) => {
+  const unsplashURL = 'https://api.unsplash.com/search/photos?per_page=1&query=';
+  const accessKey = process.env.ACCESS_KEY;
+
+  try {
+    const unsplashResponse = await axios.get(`${unsplashURL}${name}`, {
+      headers: { Authorization: `Client-ID ${accessKey}` },
+    });
+    const photo: string = unsplashResponse.data.results[0].urls.small;
+    return photo;
+  } catch (e) {
+    return '';
+  }
+};
+
+type newPlaceFunction = (name: string, callback?: (s: string) => Promise<string>)
+  => Promise<Document>
+
+export const createNewPlace: newPlaceFunction = async (name, callback) => {
+  let photo;
+
+  if (callback) {
+    photo = await callback(name);
+  } else {
+    photo = 'mockUrl';
+  }
+
+  const newPlace = new Place({ name, photo });
+  const savedPlace = await newPlace.save();
+
+  return savedPlace;
+};
 
 export const createPlace: controllerFunction = async (req, res, next) => {
   if (req.body && req.body.name) {
     const { name } = req.body;
-
-    try {
-      const unsplashResponse = await axios.get(`${unsplashURL}${name}`, {
-        headers: { Authorization: `Client-ID ${accessKey}` },
-      });
-      const photo = unsplashResponse.data.results[0].urls.small;
-
-      const newPlace = new Place({ name, photo });
-      const savedPlace = await newPlace.save();
-
-      res.send(savedPlace);
-
-    } catch (e) {
-      res.send('Search term not found on Unsplash');
-    }
+    const savedPlace = await createNewPlace(name, fetchImage);
+    res.send(savedPlace);
+  } else {
+    res.send('You should specify a name');
   }
-
-  res.send('You should specify a name');
 };
 
 interface FindQuery {
@@ -90,25 +108,18 @@ export const updatePlace: controllerFunction = async (req, res, next) => {
       if (regex.test(inDatabase.name)) {
         res.send('This place id has that name already');
       } else {
-        try {
-          const unsplashResponse = await axios.get(`${unsplashURL}${name}`, {
-            headers: { Authorization: `Client-ID ${accessKey}` },
-          });
-          const photo = unsplashResponse.data.results[0].urls.small;
+        const photo = await fetchImage(name);
 
-          const newPlace = new Place({ _id, name, photo });
-          const result = await Place.findByIdAndUpdate(_id, newPlace);
+        const newPlace = new Place({ _id, name, photo });
+        const result = await Place.findByIdAndUpdate(_id, newPlace);
 
-          if (result) {
-            const placeToSend = {
-              _id: result._id,
-              name,
-              photo,
-            };
-            res.send(placeToSend);
-          }
-        } catch (e) {
-          console.log(e);
+        if (result) {
+          const placeToSend = {
+            _id: result._id,
+            name,
+            photo,
+          };
+          res.send(placeToSend);
         }
       }
     } else {
