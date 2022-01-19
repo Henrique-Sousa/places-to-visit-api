@@ -101,7 +101,7 @@ test('PUT /places/:id with an id that doesnt exists', async () => {
   await insertPlaces();
 
   const place = await Place.findOne({ name: 'maringa' });
-  
+
   const result = await request(app)
     .put('/places/')
     .send({
