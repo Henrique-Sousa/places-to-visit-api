@@ -76,9 +76,10 @@ export const getAllPlaces: controllerFunction = async (req, res, next) => {
   res.end();
 };
 
-// export const getPlaceById: controllerFunction = async (req, res, next) => {
-//
-// };
+export const getPlaceById: controllerFunction = async (req, res, next) => {
+  const placeResult = await Place.findById(req.params.id);
+  res.send(placeResult);
+};
 
 // export const updatePlace: controllerFunction = async (req, res, next) => {
 //
