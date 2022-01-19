@@ -96,3 +96,19 @@ test('DELETE /places/:id', async () => {
     expect(result.length).toBe(4);
   }
 });
+
+test('PUT /places/:id with a place that already exists', async () => {
+  await insertPlaces();
+
+  const place = await Place.findOne({ name: 'maringa' });
+
+  if (place) {
+    const result = await request(app)
+      .put('/places/')
+      .send({
+        _id: place._id.toString(),
+        name: place.name,
+      });
+    expect(result.text).toBe('This place is already on database');
+  }
+});
