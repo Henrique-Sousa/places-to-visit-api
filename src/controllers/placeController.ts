@@ -81,9 +81,45 @@ export const getPlaceById: controllerFunction = async (req, res, next) => {
   res.send(placeResult);
 };
 
-// export const updatePlace: controllerFunction = async (req, res, next) => {
-//
-// };
+export const updatePlace: controllerFunction = async (req, res, next) => {
+  if (req.body && req.body.name && req.body._id) {
+    const { _id, name } = req.body;
+    const inDatabase = await Place.findById(_id);
+    if (inDatabase) {
+      const regex = new RegExp(name, 'i');
+      if (regex.test(inDatabase.name)) {
+        res.send('This place id has that name already');
+      } else {
+        try {
+          const unsplashResponse = await axios.get(`${unsplashURL}${name}`, {
+            headers: { Authorization: `Client-ID ${accessKey}` },
+          });
+          const photo = unsplashResponse.data.results[0].urls.small;
+
+          const newPlace = new Place({ _id, name, photo });
+          const result = await Place.findByIdAndUpdate(_id, newPlace);
+
+          if (result) {
+            const placeToSend = {
+              _id: result._id,
+              name,
+              photo,
+            };
+            res.send(placeToSend);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    } else {
+      res.send('This id is not on database');
+    }
+
+    res.end();
+  } else {
+    res.send('You should specify an id and a name');
+  }
+};
 
 export const deletePlace: controllerFunction = async (req, res, next) => {
   await Place.findByIdAndRemove(req.params.id);
