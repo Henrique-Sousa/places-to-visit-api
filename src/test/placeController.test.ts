@@ -108,3 +108,20 @@ test('PUT /places/:id with a place that doesnt exists', async () => {
     });
   expect(result.text).toBe('This place is not on database');
 });
+
+test('PUT /places/:id with a wrong id', async () => {
+  await insertPlaces();
+
+  const place1 = await Place.findOne({ name: 'maringa' });
+  const place2 = await Place.findOne({ name: 'new york' });
+
+  if (place1 && place2) {
+    const result = await request(app)
+      .put('/places/')
+      .send({
+        _id: place1._id.toString(),
+        name: place2.name,
+      });
+    expect(result.text).toBe('This is the wrong id for this place');
+  }
+});
