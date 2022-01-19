@@ -80,3 +80,19 @@ test('GET /places/:id', async () => {
     expect(result.body).toHaveProperty('photo');
   }
 });
+
+test('DELETE /places/:id', async () => {
+  await insertPlaces();
+
+  const placesResult = await Place.find();
+  const id = placesResult[0]._id;
+
+  await request(app)
+    .delete(`/places/${id}`);
+
+  const result = await Place.find();
+  expect(result);
+  if (result) {
+    expect(result.length).toBe(4);
+  }
+});
