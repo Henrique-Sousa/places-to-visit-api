@@ -103,8 +103,8 @@ test('PUT /places/:id with a place that doesnt exists', async () => {
   const result = await request(app)
     .put('/places/')
     .send({
-      _id: '42', 
-      name: 'chicago', 
+      _id: '42',
+      name: 'chicago',
     });
   expect(result.text).toBe('This place is not on database');
 });
