@@ -97,31 +97,32 @@ test('DELETE /places/:id', async () => {
   }
 });
 
-test('PUT /places/:id with a place that doesnt exists', async () => {
+test('PUT /places/:id with an id that doesnt exists', async () => {
   await insertPlaces();
 
+  const place = await Place.findOne({ name: 'maringa' });
+  
   const result = await request(app)
     .put('/places/')
     .send({
-      _id: '42',
+      _id: '000000000000000000000000',
       name: 'chicago',
     });
-  expect(result.text).toBe('This place is not on database');
+  expect(result.text).toBe('This id is not on database');
 });
 
 test('PUT /places/:id with a wrong id', async () => {
   await insertPlaces();
 
-  const place1 = await Place.findOne({ name: 'maringa' });
-  const place2 = await Place.findOne({ name: 'new york' });
+  const place = await Place.findOne({ name: 'maringa' });
 
-  if (place1 && place2) {
+  if (place) {
     const result = await request(app)
       .put('/places/')
       .send({
-        _id: place1._id.toString(),
-        name: place2.name,
+        _id: place._id.toString(),
+        name: place.name,
       });
-    expect(result.text).toBe('This is the wrong id for this place');
+    expect(result.text).toBe('This place id has that name already');
   }
 });
