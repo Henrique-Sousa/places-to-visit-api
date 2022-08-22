@@ -1,41 +1,34 @@
-# Teste Desenvolvedor: Backend - Fase 2
+# API with places to visit
 
-## Henrique Sousa
-
-email: sousa.henriquelopes@gmail.com \
-telefone: (31)99730-1889 \
-localização: Belo Horizonte, MG, Brasil \
-linkedin: linkedin.com/in/henriquelsousa
-
-Para rodar, primeiro crie um arquivo `.env` na pasta raiz com o seguinte campo \
-e preencha com sua `Access Key`
+To run, first create a file `.env` in the root directory with the following field \
+and fill in your `Access Key`
 ```
-ACCESS_KEY = <sua_key>
+ACCESS_KEY = <my_key>
 ```
 
-depois instale as dependências
+then install the dependencies
 ```bash
 npm i
 ```
 
-entao crie as chaves publica e privada:
+then create the public and private keys
 ```bash
 npm run keys
 ```
 
-transpile o codigo
+transpile the code
 ```bash
 npm run build
 ```
 
-e rode
+and run
 ```
 npm start
 ```
 
 <br>
 
-grave um usuario no banco de dados com os seguintes campos
+save a user on the database with the following fields
 ```
 {
   name: 'user1',
@@ -44,13 +37,13 @@ grave um usuario no banco de dados com os seguintes campos
 }
 ```
 
-usando `curl` e `jq`: \
-para logar e gravar o token na variavel `TOKEN`
+using `curl` e `jq` \
+to login and save the token on the variable TOKEN
 ```bash
 TOKEN=$(curl -s -X POST -H 'Content-Type: application/json' --data '{"email": "user1@mail.com", "password": "123456" }' localhost:3000/login  | jq -r '.token')
 ```
 
-para acessar um endpoint protegido:
+to access a protected endpoint
 ```bash
 curl -s -X GET -H "Authorization: $TOKEN" localhost:3000/places | jq
 ```
